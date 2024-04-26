@@ -6,7 +6,14 @@ import uuid4 from "uuid4";
 const CreateUser = () => {
   useEffect(() => {
     if (!localStorage.getItem("user")) {
-      localStorage.setItem("user", uuid4());
+      localStorage.setItem(
+        "user",
+        JSON.stringify({
+          id: uuid4(),
+          name: `Player${Math.round(Math.random() * 10000)}`,
+          color: `#fff`,
+        })
+      );
     }
   }, []);
 
