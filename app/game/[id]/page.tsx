@@ -5,6 +5,7 @@ import PlayerList from "@/components/PlayerList/PlayerList";
 import { Input } from "@/components/ui/input";
 import getGame from "@/lib/game/getGame";
 import { gameType } from "@/lib/game/types";
+import { userType } from "@/lib/player/types";
 import GameSockets from "@/lib/sockets/GameSockets";
 import { useParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
@@ -17,13 +18,24 @@ const page = () => {
   const [user, setUser] = useState<{ id: string; color: string; name: string }>(
     JSON.parse(localStorage.getItem("user"))
   );
+  const [players, setPlayers] = useState<{
+    [key: string]: { rank: number; user: userType };
+  }>({});
 
   useEffect(() => {
     getGame(String(params.id), user.id).then((game) => {
       setGame(game);
 
       let sockets = new GameSockets(game, user);
+
       sockets.connect();
+      sockets.server.on("word", (word) => {
+        console.log("CLW", word);
+        setPlayers((players) => ({
+          ...players,
+          [word.user.id]: { user: word.user, rank: word.rank },
+        }));
+      });
 
       setGameSockets(sockets);
     });
@@ -34,7 +46,7 @@ const page = () => {
       <h1 className="font-bold text-2xl">Игра {game.name}</h1>
       {gameSockets && (
         <>
-          <PlayerList server={gameSockets} />
+          <PlayerList players={players} />
           <Words game={game} gameSockets={gameSockets} />
         </>
       )}

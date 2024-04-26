@@ -23,7 +23,10 @@ const Words = (props: Props) => {
       props.game.id,
       JSON.parse(localStorage.getItem("user")).id
     ).then((history) => {
-      console.log(history);
+      console.log("H", history);
+      if (history.words.length !== 0) {
+        props.gameSockets.word(history.words[0].word, history.words[0].rank);
+      }
       setWords(history.words);
     });
   }, []);

@@ -3,21 +3,26 @@ import { gameType } from "../game/types";
 import { userType } from "../player/types";
 import { io, Socket } from "socket.io-client";
 import postData from "../fetchPost";
+import { useState } from "react";
 
 export default class GameSockets {
   game: gameType;
   user: userType;
   server: Socket;
+  players: { [key: string]: { user: userType; rank: number } };
 
   constructor(game, user) {
     this.game = game;
     this.user = user;
+    this.players = {};
   }
 
   connect() {
     this.server = io(process.env.NEXT_PUBLIC_SOCKET_IO_SERVER);
     this.server.on("word", (word) => {
-      this.onWord(word);
+      console.log("w", word);
+      this.players[word.user.id] = word;
+      console.log(this.players);
     });
     postData(`${process.env.NEXT_PUBLIC_SOCKET_IO_SERVER}/join`, {
       game: this.game,
