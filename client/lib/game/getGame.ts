@@ -5,7 +5,7 @@ export default async function getGame(
   user: string
 ): Promise<gameType> {
   const res = await fetch(
-    `https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/get_challenge_info?challenge_id=${id}`
+    `https://апи.контекстно.рф/get_challenge_info?challenge_id=${id}`
   );
 
   return await res.json();

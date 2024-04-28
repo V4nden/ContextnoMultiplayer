@@ -5,7 +5,7 @@ export default async function getGameUserHistory(
   user: string
 ): Promise<gameHistotyType> {
   const res = await fetch(
-    `https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/get_history?challenge_id=${id}&user_id=${user}&challenge_type=unofficial`
+    `https://апи.контекстно.рф/get_history?challenge_id=${id}&user_id=${user}&challenge_type=unofficial`
   );
 
   return await res.json();

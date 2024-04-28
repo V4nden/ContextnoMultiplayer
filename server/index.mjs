@@ -16,11 +16,13 @@ app.post("/join", (req, res) => {
   const rb = req.body;
 
   if (games[rb.game.id]) {
+    console.log(1);
     games[rb.game.id]["players"][rb.user.id] = {
       info: rb.user,
       words: [],
     };
   } else {
+    console.log(2);
     games[rb.game.id] = { players: {} };
   }
   console.log("GAMES: \n", JSON.stringify(games, null, 2));
@@ -45,8 +47,6 @@ app.get("/:game/players/", (req, res) => {
   }
   const players = games[req.params.game]["players"];
 
-  console.log("to " + req.ip, players);
-
   res.send(
     Object.keys(players).reduce((acc, el) => {
       return {
@@ -63,8 +63,6 @@ app.get("/:game/players/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
-  console.log(socket.id);
-
   socket.on("oper", (game) => {
     socket.join(game);
   });
@@ -77,7 +75,6 @@ io.on("connection", (socket) => {
       ...games[word.game.id]["players"][word.user.id]["words"],
       word.word,
     ];
-    console.log("GAMES: \n", JSON.stringify(games, null, 2));
     io.to(word.game.id).emit("word", {
       rank: games[word.game.id]["players"][word.user.id]["words"].sort(
         (a, b) => {
@@ -86,7 +83,6 @@ io.on("connection", (socket) => {
       )[0].rank,
       user: word.user,
     });
-    console.log(socket.rooms);
   });
 });
 

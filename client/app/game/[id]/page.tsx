@@ -28,7 +28,7 @@ const page = () => {
 
       let sockets = new GameSockets(game, user);
 
-      sockets.connect();
+      sockets.connect(false);
       sockets.server.on("word", (word) => {
         setPlayers((players) => ({
           ...players,

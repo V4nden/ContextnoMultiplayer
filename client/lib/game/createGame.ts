@@ -12,14 +12,14 @@ export default async function createGame(
     challenge_id: string;
     error: boolean;
     words: string[];
-  } = await postData(
-    "https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/create_user_challenge",
-    { user_id: user, word: word }
-  );
+  } = await postData("https://апи.контекстно.рф/create_user_challenge", {
+    user_id: user,
+    word: word,
+  });
 
   if (!res.error) {
     let publishRes = await postData(
-      "https://xn--80aqu.xn--e1ajbkccewgd.xn--p1ai/publish_challenge",
+      "https://апи.контекстно.рф/publish_challenge",
       {
         challenge_id: res.challenge_id,
         user_id: user,
