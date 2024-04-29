@@ -36,10 +36,12 @@ const page = ({ params }) => {
   }, []);
 
   return (
-    <main className="w-1/2 m-auto py-12 grid grid-cols-2 gap-2">
+    <main className="sm:w-full lg:w-[70%] xl:w-1/2 m-auto min-h-screen py-12 columns-3 gap-2">
       {gameState &&
         Object.values(gameState.players).map((player) => {
-          return <PlayerContainer player={player} />;
+          if (player.words.length != 0) {
+            return <PlayerContainer player={player} />;
+          }
         })}
     </main>
   );
@@ -51,7 +53,7 @@ const PlayerContainer = ({ player }: { player: any }) => {
   return (
     <div
       key={player.info.id}
-      className="p-2 h-fit rounded-lg"
+      className="p-2 h-full break-inside-avoid-column rounded-lg block"
       style={{
         background: `linear-gradient(180deg, ${player.info.color}77 0%, ${player.info.color}00 100%)`,
       }}

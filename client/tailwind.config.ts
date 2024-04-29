@@ -13,12 +13,11 @@ const config = {
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-        mobile: "500px",
-        square: "1000px",
-        normal: "1200px",
-      },
+    },
+    screens: {
+      sm: "300px",
+      lg: "800px",
+      xl: "1200px",
     },
     extend: {
       colors: {

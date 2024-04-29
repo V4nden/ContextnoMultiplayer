@@ -6,6 +6,7 @@ import getGameUserHistory from "@/lib/game/getGameHistory";
 import Word from "./Word";
 import submitWord from "@/lib/game/submitWord";
 import GameSockets from "@/lib/sockets/GameSockets";
+import { motion } from "framer-motion";
 
 type Props = { game: gameType; gameSockets: GameSockets };
 
@@ -42,13 +43,14 @@ const Words = (props: Props) => {
           onKeyDown={(e) => {
             if (e.key !== "Enter") return;
             submitWord(
-              word,
+              word.replaceAll("ё", "е").toLowerCase(),
               props.game,
               JSON.parse(localStorage.getItem("user")).id,
               props.gameSockets
             ).then((res) => {
               if (res.error) {
                 setError(res.details);
+                setWord("");
                 return;
               }
               setWords((words) => [
@@ -63,7 +65,11 @@ const Words = (props: Props) => {
         ></Input>
         {lastWord && <Word {...lastWord} />}
       </div>
-      <div className="flex flex-col gap-2">
+      <motion.div
+        layout
+        transition={{ duration: 0.1 }}
+        className="flex flex-col gap-2"
+      >
         {words
           .sort((a, b) => {
             return a.rank - b.rank;
@@ -71,7 +77,7 @@ const Words = (props: Props) => {
           .map(({ word, rank }) => {
             return <Word key={word} word={word} rank={rank} />;
           })}
-      </div>
+      </motion.div>
     </div>
   );
 };

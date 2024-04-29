@@ -1,10 +1,15 @@
+import { motion } from "framer-motion";
 import React from "react";
 
 type Props = { word: string; rank: number };
 
 const Word = (props: Props) => {
   return (
-    <div className="p-2 border rounded-lg justify-between flex items-center bg-zinc-950">
+    <motion.div
+      layout
+      transition={{ duration: 0.3 }}
+      className="p-2 border rounded-lg justify-between flex items-center bg-zinc-950"
+    >
       <span className="font-bold text-lg">
         <span className="flex items-center gap-2">
           <div
@@ -20,7 +25,7 @@ const Word = (props: Props) => {
         </span>
       </span>
       <span>{props.rank}</span>
-    </div>
+    </motion.div>
   );
 };
 

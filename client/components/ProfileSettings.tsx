@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import { FaCog } from "react-icons/fa";
+import { FaCog, FaUser } from "react-icons/fa";
 import { Button } from "./ui/button";
-
+import { uuid4 } from "uuid4";
 import { AnimatePresence, color, motion } from "framer-motion";
 import { Input } from "./ui/input";
 
@@ -23,6 +23,23 @@ const ProfileSettings = (props: Props) => {
       >
         <FaCog size={16} />
       </Button>
+      <Button
+        onClick={() => {
+          const newUser = {
+            id: uuid4(),
+            name: `Player${Math.round(Math.random() * 10000)}`,
+            color:
+              "#" +
+              ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0"),
+          };
+          setUser(newUser);
+          localStorage.setItem("user", JSON.stringify(newUser));
+        }}
+        className="fixed top-12 right-0 m-6 aspect-square"
+      >
+        <FaUser size={16} />
+      </Button>
+
       <AnimatePresence mode="wait">
         {opened && (
           <motion.div
