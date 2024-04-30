@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import CreateUser from "@/components/CreateUser";
 import ProfileSettings from "@/components/ProfileSettings";
+import Notifications from "@/components/Notifications/Notifications";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,6 +22,7 @@ export default function RootLayout({
       <CreateUser />
       <body className={inter.className}>
         <ProfileSettings />
+        <Notifications />
         {children}
       </body>
     </html>

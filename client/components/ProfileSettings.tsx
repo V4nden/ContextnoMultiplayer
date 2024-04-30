@@ -52,7 +52,7 @@ const ProfileSettings = (props: Props) => {
 
               setOpened(!opened);
             }}
-            className="w-full h-full fixed top-0 left-0 flex flex-col items-center justify-center backdrop-blur-sm bg-black/40"
+            className="w-full h-full fixed top-0 left-0 flex flex-col z-50 items-center justify-center backdrop-blur-sm bg-black/40"
           >
             <div className="w-1/3 m-auto flex gap-2">
               <Input

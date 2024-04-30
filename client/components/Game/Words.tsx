@@ -8,10 +8,14 @@ import submitWord from "@/lib/game/submitWord";
 import GameSockets from "@/lib/sockets/GameSockets";
 import { motion } from "framer-motion";
 
+import { observer } from "mobx-react-lite";
+import GameStore from "@/lib/store/GameStore";
+
 type Props = { game: gameType; gameSockets: GameSockets };
 
-const Words = (props: Props) => {
-  const [words, setWords] = useState<{ word: string; rank: number }[]>([]);
+const Words = observer((props: Props) => {
+  const { words, setWords } = GameStore;
+
   const [lastWord, setLastWord] = useState<{
     word: string;
     rank: number;
@@ -53,10 +57,7 @@ const Words = (props: Props) => {
                 setWord("");
                 return;
               }
-              setWords((words) => [
-                ...words,
-                { word: res.word, rank: res.rank },
-              ]);
+              setWords([...words, { word: res.word, rank: res.rank }]);
               setWord("");
               setLastWord({ word: res.word, rank: res.rank });
             });
@@ -71,7 +72,7 @@ const Words = (props: Props) => {
         className="flex flex-col gap-2"
       >
         {words
-          .sort((a, b) => {
+          .toSorted((a, b) => {
             return a.rank - b.rank;
           })
           .map(({ word, rank }) => {
@@ -80,6 +81,6 @@ const Words = (props: Props) => {
       </motion.div>
     </div>
   );
-};
+});
 
 export default Words;

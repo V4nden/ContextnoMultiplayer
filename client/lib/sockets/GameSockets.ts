@@ -17,6 +17,10 @@ export default class GameSockets {
     this.players = {};
   }
 
+  hint(to: string, word: string) {
+    this.server.emit("hint", { to: to, word: word, from: this.user });
+  }
+
   connect(op?: boolean) {
     this.server = io(process.env.NEXT_PUBLIC_SOCKET_IO_SERVER);
     this.server.on("word", (word) => {

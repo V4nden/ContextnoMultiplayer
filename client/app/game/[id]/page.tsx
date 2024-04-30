@@ -12,25 +12,38 @@ import { motion } from "framer-motion";
 import { Span } from "next/dist/trace";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { FaEye } from "react-icons/fa";
-const page = () => {
+import { FaEye, FaLightbulb } from "react-icons/fa";
+import { observer } from "mobx-react-lite";
+import GameStore from "@/lib/store/GameStore";
+import submitWord from "@/lib/game/submitWord";
+import NotificationsStore from "@/lib/store/NotificationsStore";
+const page = observer(() => {
   const params = useParams();
 
   const router = useRouter();
-
-  const [game, setGame] = useState<gameType | null>(null);
-  const [gameSockets, setGameSockets] = useState<GameSockets | null>(null);
   const [user, setUser] = useState<{ id: string; color: string; name: string }>(
     JSON.parse(localStorage.getItem("user"))
   );
-  const [players, setPlayers] = useState<{
-    [key: string]: { rank: number; user: userType };
-  }>({});
+
+  const { notify } = NotificationsStore;
+
+  const {
+    players,
+    setPlayers,
+    words,
+    addWord,
+    addPlayer,
+    gameSockets,
+    setGameSockets,
+    game,
+    setGame,
+  } = GameStore;
   const [error, setError] = useState<null | { error: string; desc: string }>(
     null
   );
   useEffect(() => {
     getGame(String(params.id), user.id).then((game) => {
+      console.log(game);
       if (Object.keys(game).length == 0) {
         setError({
           error: "Игра не найдена",
@@ -44,10 +57,19 @@ const page = () => {
 
       sockets.connect(false);
       sockets.server.on("word", (word) => {
-        setPlayers((players) => ({
-          ...players,
-          [word.user.id]: { user: word.user, rank: word.rank },
-        }));
+        addPlayer({ user: word.user, rank: word.rank });
+      });
+      sockets.server.on("hint", (hint: { word: string; from: userType }) => {
+        submitWord(hint.word, game, user.id, sockets).then((res) => {
+          if (!res.error) {
+            notify({
+              title: "Подсказка!",
+              text: `${hint.from.name} подсказал вам слово ${hint.word}!`,
+              icon: <FaLightbulb fill="#ddd" />,
+            });
+            addWord({ word: res.word, rank: res.rank });
+          }
+        });
       });
 
       fetch(
@@ -96,7 +118,7 @@ const page = () => {
         )}
       </main>
     ) : (
-      <div>Loading</div>
+      <div>Loading {JSON.stringify(game)}</div>
     )
   ) : (
     <div className="w-full min-h-screen flex items-center justify-center flex-col gap-2">
@@ -104,6 +126,6 @@ const page = () => {
       <span>{error.desc}</span>
     </div>
   );
-};
+});
 
 export default page;

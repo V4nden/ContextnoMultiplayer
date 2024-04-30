@@ -13,7 +13,7 @@ import { cn } from "@/lib/utils";
 import { motion } from "framer-motion";
 import React from "react";
 
-type Props = { player: Root; place: number };
+type Props = { player: Root; place: number; deco?: boolean };
 
 const placeColors = {
   0: "bg-green-500",
@@ -31,14 +31,17 @@ const Player = (props: Props) => {
       }}
     >
       <div className="flex items-center gap-2">
-        <span
-          className={cn(
-            "p-1 text-center leading-none bg-zinc-800 rounded-lg text-zinc-300 font-bold aspect-square w-6 h-6 shadow-sm",
-            placeColors[props.place]
-          )}
-        >
-          {props.place + 1}
-        </span>
+        {!props.deco && (
+          <span
+            className={cn(
+              "p-1 text-center leading-none bg-zinc-800 rounded-lg text-zinc-300 font-bold aspect-square w-6 h-6 shadow-sm",
+              placeColors[props.place]
+            )}
+          >
+            {props.place + 1}
+          </span>
+        )}
+
         <span className="font-bold">{props.player.user.name}</span>
       </div>
       {props.player.rank == 1 ? (

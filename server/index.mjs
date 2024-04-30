@@ -8,6 +8,7 @@ const server = createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
 let games = {};
+let sockets = {};
 
 app.use(cors());
 app.use(express.json());
@@ -46,15 +47,18 @@ app.get("/:game/players/", (req, res) => {
     return;
   }
   const players = games[req.params.game]["players"];
-
+  console.log("P", players);
   res.send(
     Object.keys(players).reduce((acc, el) => {
       return {
         ...acc,
         [players[el]["info"]["id"]]: {
-          rank: players[el]["words"].sort((a, b) => {
-            return a.rank - b.rank;
-          })[0].rank,
+          rank:
+            players[el]["words"].length == 0
+              ? 20000
+              : players[el]["words"].sort((a, b) => {
+                  return a.rank - b.rank;
+                })[0].rank,
           user: players[el]["info"],
         },
       };
@@ -67,10 +71,21 @@ io.on("connection", (socket) => {
     socket.join(game);
   });
 
+  socket.on("hint", (hint) => {
+    if (sockets[hint.to]) {
+      io.to(sockets[hint.to]).emit("hint", {
+        word: hint.word,
+        from: hint.from,
+      });
+      console.log(hint);
+    }
+  });
+
   socket.on("word", (word) => {
     console.clear();
     socket.join(word.game.id);
     console.log(word);
+    sockets[word.user.id] = socket.id;
     games[word.game.id]["players"][word.user.id]["words"] = [
       ...games[word.game.id]["players"][word.user.id]["words"],
       word.word,
