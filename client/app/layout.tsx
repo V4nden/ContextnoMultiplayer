@@ -4,6 +4,7 @@ import "./globals.css";
 import CreateUser from "@/components/CreateUser";
 import ProfileSettings from "@/components/ProfileSettings";
 import Notifications from "@/components/Notifications/Notifications";
+import NavBar from "@/components/NavBar/NavBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +21,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <CreateUser />
-      <body className={inter.className}>
-        <ProfileSettings />
+      <body className={`${inter.className} overflow-x-hidden`}>
+        <NavBar />
         <Notifications />
         {children}
       </body>

@@ -20,6 +20,10 @@ const config = {
       xl: "1200px",
     },
     extend: {
+      dropShadow: {
+        glow: ["0 0px 8px rgba(255,255, 255, .5)"],
+        sglow: ["0 0px 16px rgba(255,255, 255, .03)"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

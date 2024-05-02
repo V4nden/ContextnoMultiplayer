@@ -1,36 +1,65 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Сорвеновательный режим для игры констекстно.рф
 
-## Getting Started
+_Автор оригинальной игры - https://github.com/yuloskov (Артем Юлосков)_
 
-First, run the development server:
+## Как играть в контекстно.рф?
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Цель игры - угадать секретное слово. Это слово занимает первое место в списке.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Основные правила (из оригинальной игры)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+У тебя есть неограниченное количество попыток.
+Все слова в списке ранжированы по их схожести с секретным словом.
+Чем выше слово в списке (чем меньше его номер), тем оно ближе к секретному слову
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Принцип работы
 
-## Learn More
+Это как игра горячо-холодно. Например, если секретное слово "кот", то "кошка" будет выше в списке (ближе к "коту") по сравнению с "собака".
+Алгоритм анализировал множество текстов и использует контекст для определения сходства слов.
+Введи случайное слово в поле ввода и нажми на кнопку со стрелочкой. Правила сразу станут понятны. Удачи!
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+_Проект использует API контекстно.рф, загадать можно любое слово что есть в словаре оригинальной игры!_
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Механики дополнения
 
-## Deploy on Vercel
+### Комнаты
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Комната - игра, каждое загаданное слово создаёт комнату к которой может подключится неограниченное количество игроков.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### Игроки
+
+Каждый игрок имеет своё место, цвет и никнейм. Место вычисляется относительно очков других игроков в комнате, очки же в свою очередь устанавливаются за ранг ближайшего к загаданному слову
+
+### Подсказки
+
+Подсказок из оригинальной игры нету, вместо этого оператор (лидер лобби) может сам подсказывать игрокам слова связанные с загаданным, либо словами описать что загаданное слово из себя представляет.
+Любой игрок в комнате может поделится имеющимся у себя словом с другим игроком, наведя на него курсор и нажав соответствующую кнопку на слове. Делится словами можно неограниченно.
+
+### Оператор
+
+Лидер лобби сразу становится оператором. Оператор может видеть, какие слова пишут игроки и в зависимости от правильности хода их мыслей направлять на загаданное слово. Оператором может стать игрок, который отгадал загаданное слово.
+
+### Лучше всего играть в компании, с голосовым чатом
+
+---
+
+# Развертывание проекта локально
+
+После клонирования репозитория установите все зависимости в директориях `client/` и `server/`
+
+> `$ cd client && npm i` > `$ cd server && npm i`
+
+В папке client создайте файл `.env.local` и укажите ключ `NEXT_PUBLIC_SOCKET_IO_SERVER`, это будет IP-адрес с портом **25535**
+_Пример:_
+`.env.local`
+`NEXT_PUBLIC_SOCKET_IO_SERVER="http://localhost:25535"`
+
+Запуск проекта осуществляется запуском веб приложения и сервера где происходит общение клиентов (игроков) между собой
+
+> `$ cd server` >`$ npm start`
+
+> `$ cd client` >`$ npx next dev`
+
+### Готово! Проект запущен на порту 3000!
