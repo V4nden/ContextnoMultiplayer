@@ -87,7 +87,7 @@ const page = observer(() => {
 
   return !error ? (
     game ? (
-      <main className="sm:w-full xl:w-1/3 lg:w-1/2 sm:px-6 lg:px-0 m-auto flex py-12 items-center min-h-screen flex-col gap-2">
+      <main className="sm:w-full xl:w-1/3 lg:w-1/2 sm:px-6 lg:px-0 m-auto flex pt-24 items-center min-h-screen flex-col gap-2">
         <h1 className="font-bold text-2xl">Игра {game.name}</h1>
         {gameSockets && (
           <>

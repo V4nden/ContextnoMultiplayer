@@ -45,7 +45,7 @@ const PreviewWidget = (props: Props) => {
         className="flex justify-between w-full border p-2 rounded-lg items-center"
         style={{
           background:
-            "linear-gradient(90deg, rgba(0,255,1,1) 0%, rgba(0,196,34,1) 100%)",
+            "linear-gradient(90deg, rgba(83,255,61, 0.667) 0%, rgba(83,255,61, 0.333) 100%)",
         }}
       >
         <div className="flex items-center gap-2">
@@ -63,7 +63,7 @@ const PreviewWidget = (props: Props) => {
         className="flex justify-between w-full border p-2 rounded-lg items-center"
         style={{
           background:
-            "linear-gradient(90deg, rgba(255,175,0,1) 0%, rgba(196,135,0,1) 100%)",
+            "linear-gradient(90deg, rgba(255,61,61, 0.667) 0%, rgba(255,61,61, 0.333) 100%)",
         }}
       >
         <div className="flex items-center gap-2">
@@ -77,7 +77,7 @@ const PreviewWidget = (props: Props) => {
       <input
         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
         placeholder="Слово"
-        value=""
+        readOnly
       />
 
       {/* Words */}

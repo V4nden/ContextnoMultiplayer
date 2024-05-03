@@ -32,7 +32,7 @@ export default function Home() {
           transition={{ ease: [0, 1, 0, 1], duration: 3 }}
           className="font-bold lg:text-5xl sm:text-3xl"
         >
-          Контекстно.рф
+          Контекстно
         </motion.h1>
         <motion.p
           initial={{ opacity: 0, y: 10 }}
@@ -40,8 +40,8 @@ export default function Home() {
           transition={{ ease: [0, 0.5, 0, 1], duration: 4, delay: 0.2 }}
           className="sm:text-sm lg:text-base"
         >
-          Контекстно.рф - игра-угадайка, где цель - отгадать секретное слово.
-          Игра использует контекстный анализ для определения схожести слов и
+          Контекстно - игра-угадайка, где цель - отгадать секретное слово. Игра
+          использует контекстный анализ для определения схожести слов и
           ранжирования их по близости к загаданному. Простые правила и
           интуитивный интерфейс делают её увлекательной головоломкой для
           любителей словесных игр.
@@ -53,7 +53,7 @@ export default function Home() {
           className="grid grid-cols-[3fr_1fr] gap-2 w-full"
         >
           <Input
-            className="w-full transition-all focus:drop-shadow-glow"
+            className="w-full transition-all focus:brightness-105"
             placeholder="Слово"
             value={word}
             onChange={(e) => {

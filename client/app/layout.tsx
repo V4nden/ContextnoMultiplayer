@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import CreateUser from "@/components/CreateUser";
-import ProfileSettings from "@/components/ProfileSettings";
 import Notifications from "@/components/Notifications/Notifications";
 import NavBar from "@/components/NavBar/NavBar";
+import ProfileSettings from "@/components/Profile/ProfileSettings";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,10 +19,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <CreateUser />
       <body className={`${inter.className} overflow-x-hidden`}>
         <NavBar />
         <Notifications />
+        <ProfileSettings />
         {children}
       </body>
     </html>
