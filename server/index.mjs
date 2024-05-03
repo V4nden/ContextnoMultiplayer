@@ -25,6 +25,10 @@ app.post("/join", (req, res) => {
   } else {
     console.log(2);
     games[rb.game.id] = { players: {} };
+    games[rb.game.id]["players"][rb.user.id] = {
+      info: rb.user,
+      words: [],
+    };
   }
   console.log("GAMES: \n", JSON.stringify(games, null, 2));
 
@@ -82,7 +86,6 @@ io.on("connection", (socket) => {
   });
 
   socket.on("word", (word) => {
-    console.clear();
     socket.join(word.game.id);
     console.log(word);
     sockets[word.user.id] = socket.id;
