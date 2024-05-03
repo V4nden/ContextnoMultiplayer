@@ -9,12 +9,6 @@ import { useEffect, useState } from "react";
 const ProfileSettings = observer(() => {
   const { user, settingsModal, settingsModalSwitch, setUser } = UserStore;
 
-  const [profile, setProfile] = useState(user);
-
-  useEffect(() => {
-    setUser(profile);
-  }, [profile]);
-
   return (
     <>
       {user && (
@@ -24,17 +18,17 @@ const ProfileSettings = observer(() => {
           </h1>
           <h1 className="text-2xl font-bold text-zinc-300">Ник</h1>
           <Input
-            value={profile.name}
+            value={user.name}
             onChange={(e) => {
-              setProfile({ ...profile, name: e.target.value });
+              setUser({ ...user, name: e.target.value });
             }}
           ></Input>
           <h1 className="text-2xl font-bold text-zinc-300">Цвет</h1>
           <input
             onChange={(e) => {
-              setProfile({ ...profile, color: e.target.value });
+              setUser({ ...user, color: e.target.value });
             }}
-            value={profile.color}
+            value={user.color}
             type="color"
             className="rounded-md bg-zinc-950 border p-2 w-full h-10"
           ></input>

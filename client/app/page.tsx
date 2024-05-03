@@ -22,7 +22,7 @@ export default function Home() {
         animate={{ opacity: 0.15 }}
         transition={{ duration: 5 }}
         src="ttten2.svg"
-        className="absolute -z-10 top-0 left-0 h-screen w-full object-cover"
+        className="absolute -z-10 top-0 left-0 h-screen w-full object-cover select-none"
         alt=""
       />
       <div className="flex flex-col gap-4 lg:items-start sm:items-center sm:text-center lg:text-left">

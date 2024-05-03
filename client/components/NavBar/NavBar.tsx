@@ -3,12 +3,18 @@ import { FaGamepad, FaHeart, FaHome } from "react-icons/fa";
 import ProfileButton from "../Profile/ProfileButton";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const NavBar = () => {
   const router = useRouter();
 
   return (
-    <nav className="fixed top-0 left-0 w-full grid grid-cols-3 items-center lg:gap-4 sm:gap-2 sm:p-2 lg:p-4 lg:px-24">
+    <motion.nav
+      initial={{ y: -300, scale: 1.5 }}
+      animate={{ y: 0, scale: 1 }}
+      transition={{ ease: [0, 1, 0, 1], duration: 1 }}
+      className="fixed top-0 left-0 w-full grid grid-cols-3 items-center lg:gap-4 sm:gap-2 sm:p-2 lg:p-4 lg:px-24"
+    >
       <div className="flex lg:gap-2 sm:gap-1 items-center">
         <img src="icon.svg" alt="app icon" className="w-10 h-10" />
         <span className="font-bold sm:hidden lg:block">Контекстно</span>
@@ -47,7 +53,7 @@ const NavBar = () => {
       <div className="flex justify-end">
         <ProfileButton />
       </div>
-    </nav>
+    </motion.nav>
   );
 };
 
