@@ -71,6 +71,10 @@ app.get("/:game/players/", (req, res) => {
 });
 
 io.on("connection", (socket) => {
+  socket.on("disconnect", (reason) => {
+    console.log("DISCONNECT", reason);
+  });
+  // !!! REMOVE PLAYER ON DISCONNECT
   socket.on("oper", (game) => {
     socket.join(game);
   });
@@ -87,7 +91,7 @@ io.on("connection", (socket) => {
 
   socket.on("word", (word) => {
     socket.join(word.game.id);
-    console.log(word);
+    console.log("WORD", word);
     sockets[word.user.id] = socket.id;
     games[word.game.id]["players"][word.user.id]["words"] = [
       ...games[word.game.id]["players"][word.user.id]["words"],

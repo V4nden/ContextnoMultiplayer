@@ -35,6 +35,7 @@ export default class GameSockets {
   }
 
   word(word: string, rank: number) {
+    console.log(word);
     this.server.emit("word", {
       game: this.game,
       user: this.user,
