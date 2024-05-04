@@ -22,15 +22,18 @@ app.post("/join", (req, res) => {
       info: rb.user,
       words: [],
     };
+    res.send({ text: "all right" });
   } else {
-    console.log(2);
-    games[rb.game.id] = { players: {} };
-    games[rb.game.id]["players"][rb.user.id] = {
-      info: rb.user,
-      words: [],
-    };
+    res.send({ error: "not found" });
   }
   console.log("GAMES: \n", JSON.stringify(games, null, 2));
+});
+
+app.post("/create", (req, res) => {
+  const rb = req.body;
+  games[rb.challenge_id] = { players: {}, words: rb.words.slice(0, 100) };
+
+  console.log(rb);
 
   res.send({ text: "all right" });
 });
@@ -93,6 +96,9 @@ io.on("connection", (socket) => {
     socket.join(word.game.id);
     console.log("WORD", word);
     sockets[word.user.id] = socket.id;
+    if (word.rank == 1) {
+      games[word.game.id]["players"][word.user.id]["winner"] = true;
+    }
     games[word.game.id]["players"][word.user.id]["words"] = [
       ...games[word.game.id]["players"][word.user.id]["words"],
       word.word,

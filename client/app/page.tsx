@@ -25,7 +25,7 @@ export default function Home() {
         className="absolute -z-10 top-0 left-0 h-screen w-full object-cover select-none"
         alt=""
       />
-      <div className="flex flex-col gap-4 lg:items-start sm:items-center sm:text-center lg:text-left">
+      <div className="flex flex-col gap-4 lg:items-start sm:p-8 lg:p-0 sm:items-center sm:text-center lg:text-left">
         <motion.h1
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -50,7 +50,7 @@ export default function Home() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ ease: [0, 0.5, 0, 1], duration: 4, delay: 0.3 }}
-          className="grid grid-cols-[3fr_1fr] gap-2 w-full"
+          className="sm:flex sm:flex-col lg:grid lg:grid-cols-[3fr_1fr] gap-4 w-full"
         >
           <Input
             className="w-full transition-all focus:brightness-105"
@@ -61,6 +61,7 @@ export default function Home() {
             }}
           ></Input>
           <Button
+            className="lg:w-full sm:w-2/3 sm:m-auto"
             onClick={() => {
               createGame(
                 word.replaceAll("ё", "е").toLowerCase(),

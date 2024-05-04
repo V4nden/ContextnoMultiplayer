@@ -18,6 +18,7 @@ export default async function createGame(
   });
 
   if (!res.error) {
+    postData(`${process.env.NEXT_PUBLIC_SOCKET_IO_SERVER}/create`, res);
     let publishRes = await postData(
       "https://апи.контекстно.рф/publish_challenge",
       {

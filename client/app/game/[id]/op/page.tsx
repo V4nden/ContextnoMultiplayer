@@ -7,6 +7,7 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 
 const page = ({ params }) => {
   const [gameState, setGameState] = useState(null);
+  const [game, setGame] = useState(null);
 
   useEffect(() => {
     postData(process.env.NEXT_PUBLIC_SOCKET_IO_SERVER + "/gamestate", {
