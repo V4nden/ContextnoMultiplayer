@@ -1,0 +1,18 @@
+{
+  "name": "ctxmultiplayerserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index.mjs"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "nodemon": "^3.1.0",
+    "socket.io": "^4.7.5",
+    "socketio": "^1.0.0"
+  }
+}
