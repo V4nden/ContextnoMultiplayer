@@ -2,16 +2,17 @@
 import PreviewWidget from "@/components/HomePage/PreviewWidget";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import postData from "@/lib/fetchPost";
 import createGame from "@/lib/game/createGame";
-import { Label } from "@radix-ui/react-label";
+import UserStore from "@/lib/store/UserStore";
 import { motion } from "framer-motion";
+import { observer } from "mobx-react-lite";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function Home() {
+const Home = observer(() => {
   const router = useRouter();
 
+  const { user } = UserStore;
   const [word, setWord] = useState("");
   const [error, setError] = useState("");
 
@@ -63,16 +64,15 @@ export default function Home() {
           <Button
             className="lg:w-full sm:w-2/3 sm:m-auto"
             onClick={() => {
-              createGame(
-                word.replaceAll("ё", "е").toLowerCase(),
-                localStorage.getItem("user")
-              ).then((game) => {
-                if (game.error) {
-                  setError("Произошла ошибка");
-                } else {
-                  router.push(`/game/${game.challenge_id}`);
+              createGame(word.replaceAll("ё", "е").toLowerCase(), user.id).then(
+                (game) => {
+                  if (game.error) {
+                    setError("Произошла ошибка");
+                  } else {
+                    router.push(`/game/${game.challenge_id}`);
+                  }
                 }
-              });
+              );
             }}
           >
             Создать игру
@@ -83,4 +83,6 @@ export default function Home() {
       <PreviewWidget />
     </main>
   );
-}
+});
+
+export default Home;

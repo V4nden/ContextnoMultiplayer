@@ -5,20 +5,7 @@ import { useEffect } from "react";
 import { uuid4 } from "uuid4";
 
 const ProfileButton = observer(() => {
-  const { user, setUser, settingsModalSwitch } = UserStore;
-
-  useEffect(() => {
-    if (!localStorage.getItem("user")) {
-      const newuser = {
-        name: `Player${Math.round(Math.random() * 1000)}`,
-        id: uuid4(),
-        color:
-          "#" + ((Math.random() * 0xffffff) << 0).toString(16).padStart(6, "0"),
-      };
-      localStorage.setItem("user", JSON.stringify(newuser));
-      setUser(newuser);
-    }
-  }, []);
+  const { user, settingsModalSwitch } = UserStore;
 
   return user ? (
     <button

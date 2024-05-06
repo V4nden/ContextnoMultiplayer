@@ -2,12 +2,15 @@
 import Word from "@/components/Game/Word";
 import postData from "@/lib/fetchPost";
 import GameSockets from "@/lib/sockets/GameSockets";
+import UserStore from "@/lib/store/UserStore";
+import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 
-const page = ({ params }) => {
+const page = observer(({ params }: { params: { [key: string]: string } }) => {
   const [gameState, setGameState] = useState(null);
   const [game, setGame] = useState(null);
+  const { user } = UserStore;
 
   useEffect(() => {
     postData(process.env.NEXT_PUBLIC_SOCKET_IO_SERVER + "/gamestate", {
@@ -17,10 +20,7 @@ const page = ({ params }) => {
       setGameState(res);
     });
 
-    let sockets = new GameSockets(
-      params.id,
-      JSON.parse(localStorage.getItem("user"))
-    );
+    let sockets = new GameSockets(params.id, user);
     sockets.connect(true);
     sockets.server.emit("oper", params.id);
     sockets.server.on("word", () => {
@@ -46,7 +46,7 @@ const page = ({ params }) => {
         })}
     </main>
   );
-};
+});
 
 const PlayerContainer = ({ player }: { player: any }) => {
   const [expanded, setExpanded] = useState(false);

@@ -10,12 +10,13 @@ import { motion } from "framer-motion";
 
 import { observer } from "mobx-react-lite";
 import GameStore from "@/lib/store/GameStore";
+import UserStore from "@/lib/store/UserStore";
 
 type Props = { game: gameType; gameSockets: GameSockets };
 
 const Words = observer((props: Props) => {
   const { words, setWords } = GameStore;
-
+  const { user } = UserStore;
   const [lastWord, setLastWord] = useState<{
     word: string;
     rank: number;
@@ -24,10 +25,7 @@ const Words = observer((props: Props) => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    getGameUserHistory(
-      props.game.id,
-      JSON.parse(localStorage.getItem("user")).id
-    ).then((history) => {
+    getGameUserHistory(props.game.id, user.id).then((history) => {
       console.log("F", history);
       if (history.words.length !== 0) {
         props.gameSockets.word(history.words[0].word, history.words[0].rank);
@@ -50,7 +48,7 @@ const Words = observer((props: Props) => {
             submitWord(
               word.replaceAll("ё", "е").toLowerCase(),
               props.game,
-              JSON.parse(localStorage.getItem("user")).id,
+              user.id,
               props.gameSockets
             ).then((res) => {
               if (res.error) {
