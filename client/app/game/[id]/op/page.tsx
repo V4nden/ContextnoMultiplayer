@@ -1,14 +1,14 @@
 "use client";
 import Word from "@/components/Game/Word";
 import postData from "@/lib/fetchPost";
+import { inGameType } from "@/lib/game/types";
 import GameSockets from "@/lib/sockets/GameSockets";
 import UserStore from "@/lib/store/UserStore";
 import { observer } from "mobx-react-lite";
-import { useEffect, useState } from "react";
-import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
 
-const page = observer(({ params }: { params: { [key: string]: string } }) => {
-  const [gameState, setGameState] = useState(null);
+const Op = observer(({ params }: { params: { [key: string]: string } }) => {
+  const [gameState, setGameState] = useState<inGameType | null>(null);
   const [game, setGame] = useState(null);
   const { user } = UserStore;
 
@@ -23,63 +23,99 @@ const page = observer(({ params }: { params: { [key: string]: string } }) => {
     let sockets = new GameSockets(params.id, user);
     sockets.connect(true);
     sockets.server.emit("oper", params.id);
-    sockets.server.on("word", () => {
-      console.log(1);
-      postData(process.env.NEXT_PUBLIC_SOCKET_IO_SERVER + "/gamestate", {
-        id: params.id,
-      }).then((res) => {
-        console.log(res);
-        setGameState(res);
-      });
+    sockets.server.on("action", (game) => {
+      setGameState(game);
     });
 
     return () => {};
   }, []);
-
   return (
-    <main className="sm:w-full lg:w-[70%] xl:w-1/2 m-auto min-h-screen py-12 columns-3 gap-2">
-      {gameState &&
-        Object.values(gameState.players).map((player) => {
-          if (player.words.length != 0) {
-            return <PlayerContainer player={player} />;
-          }
-        })}
+    <main className="p-24 grid max-h-screen min-h-screen">
+      {gameState && (
+        <div
+          className="grid gap-4 
+        grid-cols-[1fr_3fr]"
+        >
+          <div className="overflow-y-scroll flex flex-col gap-2 h-[753px] no-scrollbar">
+            {gameState.words.map((word: string, index) => {
+              return <Word word={word} rank={index + 1} />;
+            })}
+          </div>
+          <div className="flex flex-col gap-4">
+            <div
+              className="flex flex-col justify-center p-4 rounded-lg"
+              style={{
+                background: `linear-gradient(45deg, ${gameState.author.color}AA 0%, ${gameState.author.color}88 100%)`,
+              }}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <h1 className="font-bold text-4xl">Игра {gameState.name}</h1>
+              </div>
+              <h2 className="font-semibold">От {gameState.author.name}</h2>
+            </div>
+            <div className="grid gap-4 grid-cols-[1fr_2fr] h-full">
+              <div className="flex flex-col gap-2 h-[641px] overflow-y-scroll no-scrollbar">
+                {gameState.recentActions.toReversed().map((action) => {
+                  return (
+                    <div className="border p-4 flex gap-4 items-center rounded-lg">
+                      <div
+                        className="rounded-full h-1/2 w-2"
+                        style={{ backgroundColor: action.author.color }}
+                      />
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h1 className="font-bold">{action.author.name}</h1>
+                          <span className="text-zinc-400 text-sm">{`${new Date(
+                            action.time
+                          ).getHours()}:${new Date(
+                            action.time
+                          ).getMinutes()}`}</span>
+                        </div>
+
+                        <div>{action.content}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <div className="columns-2 gap-2 h-[641px] overflow-y-scroll no-scrollbar">
+                {Object.values(gameState.players).map((player) => {
+                  return (
+                    player.words.length > 0 && (
+                      <div className="border mb-2 rounded-lg p-4 flex flex-col gap-2 break-inside-avoid-column">
+                        <div
+                          className="rounded-lg p-2 flex justify-between"
+                          style={{
+                            background: `linear-gradient(45deg, ${player.info.color}AA 0%, ${player.info.color}88 100%)`,
+                          }}
+                        >
+                          <h2 className="font-bold text-xl">
+                            {player.info.name}
+                          </h2>
+                          <span>{player.words[0].rank}</span>
+                        </div>
+                        <div className="flex flex-col gap-2 h-[154px] overflow-y-scroll no-scrollbar">
+                          {player.words.map((word) => {
+                            return (
+                              <Word
+                                word={word.word}
+                                rank={word.rank}
+                                key={word.word}
+                              />
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 });
 
-const PlayerContainer = ({ player }: { player: any }) => {
-  const [expanded, setExpanded] = useState(false);
-
-  return (
-    <div
-      key={player.info.id}
-      className="p-2 h-full break-inside-avoid-column rounded-lg block"
-      style={{
-        background: `linear-gradient(180deg, ${player.info.color}77 0%, ${player.info.color}00 100%)`,
-      }}
-    >
-      <div>
-        <span className="text-2xl font-bold py-2">{player.info.name}</span>
-      </div>
-      <div className="flex flex-col gap-2">
-        {player.words.slice(0, expanded ? 10 : 3).map((word) => {
-          return <Word word={word.word} rank={word.rank} />;
-        })}
-      </div>
-      <button className="text-zinc-300 w-full flex gap-2 justify-center items-center py-2 bg-transparent border-0">
-        <span
-          className="font-bold text-lg"
-          onClick={(e) => {
-            setExpanded(!expanded);
-          }}
-        >
-          {expanded ? "Свернуть" : "Развернуть"}
-        </span>
-        {expanded ? <FaArrowUp fill="#fff" /> : <FaArrowDown fill="#fff" />}
-      </button>
-    </div>
-  );
-};
-
-export default page;
+export default Op;

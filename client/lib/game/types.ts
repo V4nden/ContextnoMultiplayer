@@ -1,3 +1,5 @@
+import { userType } from "../player/types";
+
 export interface gameType {
   id: string;
   name: string;
@@ -15,4 +17,20 @@ export interface submitWordResponse {
   tips: number;
   tries: number;
   word: string;
+}
+
+export interface inGameType {
+  players: {
+    [id: string]: {
+      info: userType;
+      words: {
+        word: string;
+        rank: number;
+      }[];
+    };
+  };
+  words: string[];
+  name: string;
+  author: userType;
+  recentActions: { author: userType; content: string; time: number }[];
 }

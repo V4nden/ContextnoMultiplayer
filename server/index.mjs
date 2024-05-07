@@ -10,6 +10,23 @@ const io = new Server(server, { cors: { origin: "*" } });
 let games = {};
 let sockets = {};
 
+function gameAction(gameId, user, content) {
+  if (!games[gameId]) return;
+  games[gameId]["recentActions"] = [
+    ...games[gameId]["recentActions"],
+    { author: user, content: content, time: Date.now() },
+  ];
+  io.to(gameId).emit("action", games[gameId]);
+}
+
+function hasWord(gameId, user, word) {
+  return (
+    games[gameId]["players"][user.id]["words"].reduce((acc, el) => {
+      return (acc += el.word === word ? 1 : 0);
+    }, 0) > 0
+  );
+}
+
 app.use(cors());
 app.use(express.json());
 
@@ -22,6 +39,7 @@ app.post("/join", (req, res) => {
       info: rb.user,
       words: [],
     };
+    gameAction(rb.game.id, rb.user, `Присоеденился к комнате`);
     res.send({ text: "all right" });
   } else {
     res.send({ error: "not found" });
@@ -31,7 +49,23 @@ app.post("/join", (req, res) => {
 
 app.post("/create", (req, res) => {
   const rb = req.body;
-  games[rb.challenge_id] = { players: {}, words: rb.words.slice(0, 100) };
+  games[rb.challenge_id] = {
+    players: {},
+    words: rb.words.slice(0, 100),
+    name: rb.name,
+    author: rb.author,
+    recentActions: [
+      {
+        author: {
+          name: "Игра",
+          color: "#aaaaaa",
+          id: "1",
+        },
+        content: `Игра ${rb.name} создана`,
+        time: Date.now(),
+      },
+    ],
+  };
 
   console.log(rb);
 
@@ -94,7 +128,7 @@ io.on("connection", (socket) => {
 
   socket.on("word", (word) => {
     socket.join(word.game.id);
-    console.log("WORD", word);
+    console.log("WORD", JSON.stringify(games[word.game.id]));
     sockets[word.user.id] = socket.id;
     if (word.rank == 1) {
       games[word.game.id]["players"][word.user.id]["winner"] = true;
@@ -103,6 +137,11 @@ io.on("connection", (socket) => {
       ...games[word.game.id]["players"][word.user.id]["words"],
       word.word,
     ];
+    gameAction(
+      word.game.id,
+      word.user,
+      `Отгадал слово ${word.word.word}(${word.word.rank})`
+    );
     io.to(word.game.id).emit("word", {
       rank: games[word.game.id]["players"][word.user.id]["words"].sort(
         (a, b) => {

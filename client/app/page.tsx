@@ -64,7 +64,7 @@ const Home = observer(() => {
           <Button
             className="lg:w-full sm:w-2/3 sm:m-auto"
             onClick={() => {
-              createGame(word.replaceAll("ё", "е").toLowerCase(), user.id).then(
+              createGame(word.replaceAll("ё", "е").toLowerCase(), user).then(
                 (game) => {
                   if (game.error) {
                     setError("Произошла ошибка");
