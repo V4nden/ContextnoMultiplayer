@@ -1,5 +1,7 @@
 # Сорвеновательный режим для игры констекстно.рф
 
+![preview](https://github.com/V4nden/ContextnoMultiplayer/assets/59515058/3db81c92-dc16-4660-ae87-385194181363)
+
 _Автор оригинальной игры - https://github.com/yuloskov (Артем Юлосков)_
 
 ## Как играть в контекстно?
