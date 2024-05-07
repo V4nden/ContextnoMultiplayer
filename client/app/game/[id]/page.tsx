@@ -84,7 +84,7 @@ const page = observer(() => {
       });
     }
     return () => {
-      sockets.server.disconnect();
+      sockets && sockets.server.disconnect();
       setGame(undefined);
       setPlayers(undefined);
       setGameSockets(undefined);

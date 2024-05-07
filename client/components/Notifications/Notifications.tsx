@@ -15,7 +15,7 @@ const Notifications = observer(() => {
     >
       <AnimatePresence mode="wait">
         {notifications.map((notification) => {
-          return <Notification {...notification} />;
+          return <Notification key={Date.now()} {...notification} />;
         })}
       </AnimatePresence>
     </motion.div>

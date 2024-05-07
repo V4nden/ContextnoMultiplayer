@@ -38,7 +38,7 @@ const Op = observer(({ params }: { params: { [key: string]: string } }) => {
         >
           <div className="overflow-y-scroll flex flex-col gap-2 h-[753px] no-scrollbar">
             {gameState.words.map((word: string, index) => {
-              return <Word word={word} rank={index + 1} />;
+              return <Word word={word} rank={index + 1} key={index} />;
             })}
           </div>
           <div className="flex flex-col gap-4">
@@ -53,11 +53,14 @@ const Op = observer(({ params }: { params: { [key: string]: string } }) => {
               </div>
               <h2 className="font-semibold">От {gameState.author.name}</h2>
             </div>
-            <div className="grid gap-4 grid-cols-[1fr_2fr] h-full">
+            <div className="grid gap-4 xl:grid-cols-[1fr_2fr] lg:grid-cols-[1fr_1fr] h-full">
               <div className="flex flex-col gap-2 h-[641px] overflow-y-scroll no-scrollbar">
-                {gameState.recentActions.toReversed().map((action) => {
+                {gameState.recentActions.toReversed().map((action, index) => {
                   return (
-                    <div className="border p-4 flex gap-4 items-center rounded-lg">
+                    <div
+                      key={index}
+                      className="border p-4 flex gap-4 items-center rounded-lg"
+                    >
                       <div
                         className="rounded-full h-1/2 w-2"
                         style={{ backgroundColor: action.author.color }}
@@ -78,11 +81,14 @@ const Op = observer(({ params }: { params: { [key: string]: string } }) => {
                   );
                 })}
               </div>
-              <div className="columns-2 gap-2 h-[641px] overflow-y-scroll no-scrollbar">
+              <div className="xl:columns-2 gap-2 h-[641px] overflow-y-scroll no-scrollbar">
                 {Object.values(gameState.players).map((player) => {
                   return (
                     player.words.length > 0 && (
-                      <div className="border mb-2 rounded-lg p-4 flex flex-col gap-2 break-inside-avoid-column">
+                      <div
+                        key={player.info.id}
+                        className="border mb-2 rounded-lg p-4 flex flex-col gap-2 break-inside-avoid-column"
+                      >
                         <div
                           className="rounded-lg p-2 flex justify-between"
                           style={{

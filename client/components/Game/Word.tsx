@@ -1,3 +1,4 @@
+"use client";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useState } from "react";
 import { observer } from "mobx-react-lite";
@@ -55,6 +56,7 @@ const Word = observer((props: Props) => {
             {Object.values(players).map((player) => {
               return (
                 <button
+                  key={player.user.id}
                   onClick={() => {
                     setHint(false);
                     gameSockets.hint(player.user.id, props.word);

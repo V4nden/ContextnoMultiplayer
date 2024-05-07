@@ -1,5 +1,4 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { observer } from "mobx-react-lite";
 import { IoMdCloseCircle } from "react-icons/io";
 type Props = {
   children: React.ReactNode;
