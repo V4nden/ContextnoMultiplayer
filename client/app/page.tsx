@@ -2,7 +2,7 @@
 import PreviewWidget from "@/components/HomePage/PreviewWidget";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import createGame from "@/lib/game/createGame";
+import postData from "@/lib/fetchPost";
 import UserStore from "@/lib/store/UserStore";
 import { motion } from "framer-motion";
 import { observer } from "mobx-react-lite";
@@ -63,16 +63,15 @@ const Home = observer(() => {
           ></Input>
           <Button
             className="lg:w-full sm:w-2/3 sm:m-auto"
-            onClick={() => {
-              createGame(word.replaceAll("ё", "е").toLowerCase(), user).then(
-                (game) => {
-                  if (game.error) {
-                    setError("Произошла ошибка");
-                  } else {
-                    router.push(`/game/${game.challenge_id}`);
-                  }
+            onClick={async () => {
+              const res = await postData(
+                `${process.env.NEXT_PUBLIC_SOCKET_IO_SERVER}/create`,
+                {
+                  word: word.replaceAll("ё", "е").toLowerCase(),
+                  author: user,
                 }
               );
+              router.push("/game/" + res.id);
             }}
           >
             Создать игру

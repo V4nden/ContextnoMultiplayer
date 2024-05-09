@@ -1,10 +1,8 @@
 "use client";
-import { gameType } from "@/lib/game/types";
 import React, { useEffect, useState } from "react";
 import { Input } from "../ui/input";
-import getGameUserHistory from "@/lib/game/getGameHistory";
+
 import Word from "./Word";
-import submitWord from "@/lib/game/submitWord";
 import GameSockets from "@/lib/sockets/GameSockets";
 import { motion } from "framer-motion";
 
@@ -12,10 +10,10 @@ import { observer } from "mobx-react-lite";
 import GameStore from "@/lib/store/GameStore";
 import UserStore from "@/lib/store/UserStore";
 
-type Props = { game: gameType; gameSockets: GameSockets };
+type Props = {};
 
 const Words = observer((props: Props) => {
-  const { words, setWords } = GameStore;
+  const { words } = GameStore;
   const { user } = UserStore;
   const [lastWord, setLastWord] = useState<{
     word: string;
@@ -23,16 +21,6 @@ const Words = observer((props: Props) => {
   } | null>(null);
   const [word, setWord] = useState<string>("");
   const [error, setError] = useState("");
-
-  useEffect(() => {
-    getGameUserHistory(props.game.id, user.id).then((history) => {
-      console.log("F", history);
-      if (history.words.length !== 0) {
-        props.gameSockets.word(history.words[0].word, history.words[0].rank);
-      }
-      setWords(history.words);
-    });
-  }, []);
 
   return (
     <div className="flex flex-col w-full">
@@ -45,21 +33,6 @@ const Words = observer((props: Props) => {
           }}
           onKeyDown={(e) => {
             if (e.key !== "Enter") return;
-            submitWord(
-              word.replaceAll("ё", "е").toLowerCase(),
-              props.game,
-              user.id,
-              props.gameSockets
-            ).then((res) => {
-              if (res.error) {
-                setError(res.details);
-                setWord("");
-                return;
-              }
-              setWords([...words, { word: res.word, rank: res.rank }]);
-              setWord("");
-              setLastWord({ word: res.word, rank: res.rank });
-            });
           }}
           value={word}
         ></Input>

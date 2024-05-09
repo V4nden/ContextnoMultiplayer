@@ -8,7 +8,7 @@ import Player from "../PlayerList/Player";
 type Props = { word: string; rank: number };
 
 const Word = observer((props: Props) => {
-  const { players, gameSockets } = GameStore;
+  const { players } = GameStore;
 
   const [hint, setHint] = useState(false);
 
@@ -56,14 +56,10 @@ const Word = observer((props: Props) => {
             {Object.values(players).map((player) => {
               return (
                 <button
-                  key={player.user.id}
                   onClick={() => {
                     setHint(false);
-                    gameSockets.hint(player.user.id, props.word);
                   }}
-                >
-                  <Player place={player.rank} player={player} deco />
-                </button>
+                ></button>
               );
             })}
           </motion.div>
